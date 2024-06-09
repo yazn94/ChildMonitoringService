@@ -1,10 +1,10 @@
 package org.example.childmonitoringservice.util;
 
-import com.example.authenticationserivce.enums.UserType;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.example.childmonitoringservice.model.UserType;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;

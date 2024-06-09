@@ -1,0 +1,24 @@
+
+{
+    "parentFeedback": [
+        "Please focus on math skills",
+        "Try the memory game next"
+    ],
+    "machineLearningFeedback": "Child is doing well in math and memory games. Keep up the good work!",
+    "gameSummaries": [
+        "Completed math game with score 85",
+        "Completed memory game with score 70"
+    ],
+     "gamesPlayed": 2
+}
+
+
+Base progress:
+{
+    "parentFeedback": [],
+    "machineLearningFeedback": "",
+    "gameSummaries": [],
+    "gamesPlayed": 0
+}
+
+

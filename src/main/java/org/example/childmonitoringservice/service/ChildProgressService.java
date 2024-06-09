@@ -8,38 +8,37 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 
 @Service
-public class ChildProgressUtil {
+public class ChildProgressService {
     DAO dao;
 
     @Autowired
-    public ChildProgressUtil(DAO dao) {
+    public ChildProgressService(DAO dao) {
         this.dao = dao;
     }
 
-    public ChildProgress appendParentFeedback(ChildProgress childProgress, String feedback) {
+    public void appendParentFeedback(String email, String feedback) {
+        ChildProgress childProgress = dao.getChildProgress(email);
         if (childProgress.getParentFeedback() == null) {
             childProgress.setParentFeedback(new ArrayList<>());
         }
         childProgress.getParentFeedback().add(feedback);
-        return childProgress;
+        dao.updateChildProgress(email, childProgress);
     }
 
-    public ChildProgress addMlFeedback(ChildProgress childProgress, String feedback) {
+    public void addMlFeedback(String email, String feedback) {
+        ChildProgress childProgress = dao.getChildProgress(email);
         childProgress.setMachineLearningFeedback(feedback);
-        return childProgress;
+        dao.updateChildProgress(email, childProgress);
     }
 
-    public ChildProgress incrementGamesPlayed(ChildProgress childProgress) {
-        childProgress.setGamesPlayed(childProgress.getGamesPlayed() + 1);
-        return childProgress;
-    }
-
-    public ChildProgress addGameSummary(ChildProgress childProgress, String summary) {
+    public void addGameSummary(String email, String summary) {
+        ChildProgress childProgress = dao.getChildProgress(email);
         if (childProgress.getGameSummaries() == null) {
             childProgress.setGameSummaries(new ArrayList<>());
         }
         childProgress.getGameSummaries().add(summary);
-        return childProgress;
+        childProgress.setGamesPlayed(childProgress.getGamesPlayed() + 1);
+        dao.updateChildProgress(email, childProgress);
     }
 
     public ChildProgress getChildProgress(String email) {

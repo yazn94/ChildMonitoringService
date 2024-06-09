@@ -1,6 +1,5 @@
 package org.example.childmonitoringservice.custom_annotations;
 
-
 import jakarta.validation.Payload;
 
 import java.lang.annotation.ElementType;
