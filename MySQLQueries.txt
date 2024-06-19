@@ -67,6 +67,7 @@ create table drawingGameSummary
     game_summary TEXT,
     PRIMARY KEY (game_id)
 );
+
 create table parent_instruction
 (
     instruction_id INT AUTO_INCREMENT,

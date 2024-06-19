@@ -3,13 +3,16 @@ package org.example.childmonitoringservice.database;
 import org.example.childmonitoringservice.model.GameSummary;
 import org.example.childmonitoringservice.model.Instruction;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 @Service
 public class DAO {
+    private final String CHILD_PRO = "child_profile";
 
     private final JdbcTemplate jdbcTemplate;
     private final String GAME_SUMMARY_TABLE = "drawingGameSummary";
@@ -132,4 +135,15 @@ public class DAO {
         String sql = "DELETE FROM " + GAME_SUMMARY_TABLE + " WHERE game_id = ?";
         jdbcTemplate.update(sql, gameId);
     }
+
+    // get child age
+    public LocalDate getChildBirthDate(String childEmail) {
+        String query = "SELECT dateOfBirth FROM " + CHILD_PRO + " WHERE email = ?";
+        try {
+            return jdbcTemplate.queryForObject(query, new Object[]{childEmail}, LocalDate.class);
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
+    }
+
 }

@@ -9,5 +9,4 @@ public class ChildMonitoringServiceApplication {
     public static void main(String[] args) {
         SpringApplication.run(ChildMonitoringServiceApplication.class, args);
     }
-
 }
