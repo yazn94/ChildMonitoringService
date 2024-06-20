@@ -3,8 +3,7 @@ package org.example.childmonitoringservice.util;
 import org.example.childmonitoringservice.database.DAO;
 import org.example.childmonitoringservice.model.GameSummary;
 import org.example.childmonitoringservice.model.Instruction;
-import org.example.childmonitoringservice.model.advancedModels.GameDTO;
-import org.example.childmonitoringservice.model.advancedModels.GenerateGameRequestBody;
+import org.example.childmonitoringservice.model.advancedModels.*;
 import org.example.childmonitoringservice.service.MLIntegrationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -59,6 +58,36 @@ public class AdvancedControllerHelper {
                 .build();
 
         return mlIntegrationService.generateGame(generateGameRequestBody);
+    }
+
+    public FeedbackDTO getFeedback(String token, FeedbackRequestInput feedbackRequest) {
+        String email = JwtTokenUtil.getEmailFromToken(token);
+
+        // fetch child age
+        int age = fetchChildAge(email);
+
+        // fetch parent instructions
+        ArrayList<Instruction> parentInstructions = dao.getParentInstructions(email);
+        ArrayList<String> instructionStrings = parentInstructions.stream()
+                .map(Instruction::getInstruction)
+                .collect(Collectors.toCollection(ArrayList::new));
+
+        // fetch doctor instructions
+        ArrayList<Instruction> doctorInstructions = dao.getDoctorInstructions(email);
+        ArrayList<String> doctorInstructionStrings = doctorInstructions.stream()
+                .map(Instruction::getInstruction)
+                .collect(Collectors.toCollection(ArrayList::new));
+
+
+        FeedbackRequestBody feedbackRequestBody = FeedbackRequestBody.builder()
+                .childAge(age)
+                .parentInstructions(instructionStrings)
+                .doctorInstructions(doctorInstructionStrings)
+                .drawingSubject(feedbackRequest.getDrawingSubject())
+                .screenshot(feedbackRequest.getScreenshot())
+                .build();
+
+        return mlIntegrationService.getDrawingFeedback(feedbackRequestBody);
     }
 
 

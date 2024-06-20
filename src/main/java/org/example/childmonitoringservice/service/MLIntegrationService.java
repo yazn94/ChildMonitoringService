@@ -1,5 +1,7 @@
 package org.example.childmonitoringservice.service;
 
+import org.example.childmonitoringservice.model.advancedModels.FeedbackDTO;
+import org.example.childmonitoringservice.model.advancedModels.FeedbackRequestBody;
 import org.example.childmonitoringservice.model.advancedModels.GameDTO;
 import org.example.childmonitoringservice.model.advancedModels.GenerateGameRequestBody;
 import org.json.JSONObject;
@@ -13,6 +15,7 @@ import static org.example.childmonitoringservice.util.MLIntegrationHelper.*;
 public class MLIntegrationService {
     private final String apiPrefix = "https://0924-92-241-36-177.ngrok-free.app";
     private final String generateSubjectEndpoint = "/generate_subject";
+    private final String getFeedbackEndpoint = "/get_feedback";
 
     public GameDTO generateGame(GenerateGameRequestBody generateGameRequestBody) {
         String apiUrl = apiPrefix + generateSubjectEndpoint;
@@ -20,5 +23,13 @@ public class MLIntegrationService {
         HttpEntity<String> requestEntity = createRequestEntity(requestBody);
         ResponseEntity<String> responseEntity = sendPostRequest(apiUrl, requestEntity);
         return getGameDTO(responseEntity);
+    }
+
+    public FeedbackDTO getDrawingFeedback(FeedbackRequestBody feedbackRequestBody) {
+        String apiUrl = apiPrefix + getFeedbackEndpoint;
+        JSONObject requestBody = createRequestBody(feedbackRequestBody);
+        HttpEntity<String> requestEntity = createRequestEntity(requestBody);
+        ResponseEntity<String> responseEntity = sendPostRequest(apiUrl, requestEntity);
+        return getFeedback(responseEntity);
     }
 }

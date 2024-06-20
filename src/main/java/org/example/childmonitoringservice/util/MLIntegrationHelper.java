@@ -1,8 +1,6 @@
 package org.example.childmonitoringservice.util;
 
-import org.example.childmonitoringservice.model.advancedModels.Constants;
-import org.example.childmonitoringservice.model.advancedModels.GameDTO;
-import org.example.childmonitoringservice.model.advancedModels.GenerateGameRequestBody;
+import org.example.childmonitoringservice.model.advancedModels.*;
 import org.json.JSONObject;
 import org.springframework.http.*;
 import org.springframework.web.client.RestTemplate;
@@ -16,6 +14,16 @@ public class MLIntegrationHelper {
         requestBody.put(Constants.PARENT_INSTRUCTIONS, generateGameRequestBody.getParentInstructions());
         requestBody.put(Constants.DOCTOR_INSTRUCTIONS, generateGameRequestBody.getDoctorInstructions());
         requestBody.put(Constants.PREV_GAMES_SUBJECTS, generateGameRequestBody.getPrevGamesSubjects());
+        return requestBody;
+    }
+
+    public static JSONObject createRequestBody(FeedbackRequestBody feedbackRequestBody) {
+        JSONObject requestBody = new JSONObject();
+        requestBody.put(Constants.CHILD_AGE, feedbackRequestBody.getChildAge());
+        requestBody.put(Constants.PARENT_INSTRUCTIONS, feedbackRequestBody.getParentInstructions());
+        requestBody.put(Constants.DOCTOR_INSTRUCTIONS, feedbackRequestBody.getDoctorInstructions());
+        requestBody.put(Constants.DRAWING_SUBJECT, feedbackRequestBody.getDrawingSubject());
+        requestBody.put(Constants.DRAWING, feedbackRequestBody.getScreenshot());
         return requestBody;
     }
 
@@ -39,5 +47,12 @@ public class MLIntegrationHelper {
         gameDTO.setSubject(responseJson.getString(Constants.SUBJECT));
         gameDTO.setImage(responseJson.getString(Constants.BASE64_BACKGROUND_IMAGE));
         return gameDTO;
+    }
+
+    public static FeedbackDTO getFeedback(ResponseEntity<String> responseEntity) {
+        FeedbackDTO feedback = new FeedbackDTO();
+        JSONObject responseJson = new JSONObject(responseEntity.getBody());
+        feedback.setFeedback(responseJson.getString(Constants.ML_FEEDBACK));
+        return feedback;
     }
 }

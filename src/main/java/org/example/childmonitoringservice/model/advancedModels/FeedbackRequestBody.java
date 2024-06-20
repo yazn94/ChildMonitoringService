@@ -11,9 +11,10 @@ import java.util.ArrayList;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class GenerateGameRequestBody {
+public class FeedbackRequestBody {
     private int childAge;
     private ArrayList<String> parentInstructions;
     private ArrayList<String> doctorInstructions;
-    private ArrayList<String> prevGamesSubjects;
+    private String drawingSubject;
+    private String screenshot;
 }
