@@ -96,7 +96,6 @@ public class AdvancedControllerHelper {
     }
 
     public EncouragingFeedbackDTO finishGame(String token, FinishGameRequestInput finishGameRequest) {
-        System.out.println("Finish game method within AdvancedControllerHelper");
         String email = JwtTokenUtil.getEmailFromToken(token);
 
         // fetch child age
@@ -137,6 +136,9 @@ public class AdvancedControllerHelper {
 
         // update child level feedback
         childProgressHelper.updateGeneralFeedback(email, finishGameMLResponse.getNewChildFeedback());
+
+        // increase games played by child
+        childProgressHelper.increaseGamesPlayed(email);
 
         // return DTO
         return new EncouragingFeedbackDTO(

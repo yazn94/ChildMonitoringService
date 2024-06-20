@@ -12,9 +12,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 
-// TODO: we need to consider operations related to generating a game
-//  at the child's side. So, using the token return all parent instructions.
-
 @RestController
 @RequestMapping("/monitoring")
 public class MonitoringController {
@@ -90,25 +87,30 @@ public class MonitoringController {
     // get general ml feedback in gaming profile (by parent or doctor)
     @GetMapping("get/general/feedback")
     @ValidJwtToken
-    public String getGeneralFeedback(@RequestHeader("Authorization") String token,
-                                     @RequestBody @NotNull @Valid EmailDTO childEmail,
-                                     BindingResult bindingResult) {
+    public FeedbackDTO getGeneralFeedback(@RequestHeader("Authorization") String token,
+                                          @RequestBody @NotNull @Valid EmailDTO childEmail,
+                                          BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             throw new IllegalArgumentException("Invalid request: " + bindingResult.getAllErrors());
         }
-        return childProgressHelper.getGeneralFeedback(childEmail.getEmail());
+        return new FeedbackDTO(
+                childProgressHelper.getGeneralFeedback(childEmail.getEmail())
+        );
     }
 
     // get total played games (by parent or doctor or child)
     @GetMapping("get/total/games/played")
     @ValidJwtToken
-    public int getTotalGamesPlayed(@RequestHeader("Authorization") String token,
-                                   @RequestBody @NotNull @Valid EmailDTO childEmail,
-                                   BindingResult bindingResult) {
+    public TotalPlayedGamesDTO getTotalGamesPlayed(@RequestHeader("Authorization") String token,
+                                                   @RequestBody @NotNull @Valid EmailDTO childEmail,
+                                                   BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             throw new IllegalArgumentException("Invalid request: " + bindingResult.getAllErrors());
         }
-        return childProgressHelper.getTotalGamesPlayed(childEmail.getEmail());
+
+        return new TotalPlayedGamesDTO(
+                childProgressHelper.getTotalGamesPlayed(childEmail.getEmail())
+        );
     }
 
     // add game summary (by child) - after playing a game
