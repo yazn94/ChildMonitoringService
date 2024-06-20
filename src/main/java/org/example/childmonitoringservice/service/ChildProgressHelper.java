@@ -77,5 +77,15 @@ public class ChildProgressHelper {
     public void deleteDoctorInstruction(int instructionId) {
         dao.deleteDoctorInstruction(instructionId);
     }
+
+    // get parent email
+    public String getParentEmail(String childEmail) {
+        return dao.getParentEmail(childEmail);
+    }
+
+    // get child first name
+    public String getChildFirstName(String childEmail) {
+        return dao.getChildFirstName(childEmail);
+    }
 }
 

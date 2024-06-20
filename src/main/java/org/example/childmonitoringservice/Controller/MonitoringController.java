@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import org.example.childmonitoringservice.custom_annotations.ValidJwtToken;
 import org.example.childmonitoringservice.model.*;
 import org.example.childmonitoringservice.service.ChildProgressHelper;
+import org.example.childmonitoringservice.util.EmailHelperUtil;
 import org.example.childmonitoringservice.util.JwtTokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
@@ -15,12 +16,14 @@ import java.util.ArrayList;
 @RestController
 @RequestMapping("/monitoring")
 public class MonitoringController {
-
     private final ChildProgressHelper childProgressHelper;
+    private final EmailHelperUtil emailHelperUtil;
 
     @Autowired
-    public MonitoringController(ChildProgressHelper childProgressHelper) {
+    public MonitoringController(ChildProgressHelper childProgressHelper,
+                                EmailHelperUtil emailHelperUtil) {
         this.childProgressHelper = childProgressHelper;
+        this.emailHelperUtil = emailHelperUtil;
     }
 
     // add parent instruction (by parent)
@@ -45,6 +48,20 @@ public class MonitoringController {
             throw new IllegalArgumentException("Invalid request: " + bindingResult.getAllErrors());
         }
         childProgressHelper.addDoctorInstruction(instruction.getEmail(), instruction.getInstruction());
+
+
+        String doctorEmail = JwtTokenUtil.getEmailFromToken(token);
+        String childEmail = instruction.getEmail();
+        String instructionText = instruction.getInstruction();
+        String doctorUsername = JwtTokenUtil.getUsernameFromToken(token);
+        String parentEmail = childProgressHelper.getParentEmail(childEmail);
+        String childFirstName = childProgressHelper.getChildFirstName(childEmail);
+
+        emailHelperUtil.SendDoctorInstructionToParentEmail(parentEmail,
+                doctorEmail,
+                doctorUsername,
+                instructionText,
+                childFirstName);
     }
 
     // get parent instructions (by parent or doctor)

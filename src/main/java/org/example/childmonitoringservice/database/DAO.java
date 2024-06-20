@@ -31,6 +31,27 @@ public class DAO {
         jdbcTemplate.update(sql, email, instruction);
     }
 
+    // get parent email
+    public String getParentEmail(String childEmail) {
+        String query = "SELECT parentEmail FROM " + CHILD_PRO + " WHERE email = ?";
+        try {
+            return jdbcTemplate.queryForObject(query, new Object[]{childEmail}, String.class);
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
+    }
+
+    // get child username
+    public String getChildFirstName(String childEmail) {
+        String query = "SELECT firstName FROM " + CHILD_PRO + " WHERE email = ?";
+        try {
+            return jdbcTemplate.queryForObject(query, new Object[]{childEmail}, String.class);
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
+    }
+
+
     // adding doctor instruction to the database
     public void addDoctorInstruction(String email, String instruction) {
         String sql = "INSERT INTO " + DOCTOR_INSTRUCTION_TABLE + " (email, instruction) VALUES (?, ?)";
