@@ -1,9 +1,6 @@
 package org.example.childmonitoringservice.service;
 
-import org.example.childmonitoringservice.model.advancedModels.FeedbackDTO;
-import org.example.childmonitoringservice.model.advancedModels.FeedbackRequestBody;
-import org.example.childmonitoringservice.model.advancedModels.GameDTO;
-import org.example.childmonitoringservice.model.advancedModels.GenerateGameRequestBody;
+import org.example.childmonitoringservice.model.advancedModels.*;
 import org.json.JSONObject;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +13,7 @@ public class MLIntegrationService {
     private final String apiPrefix = "https://0924-92-241-36-177.ngrok-free.app";
     private final String generateSubjectEndpoint = "/generate_subject";
     private final String getFeedbackEndpoint = "/get_feedback";
+    private final String finishGameEndpoint = "/finish_game";
 
     public GameDTO generateGame(GenerateGameRequestBody generateGameRequestBody) {
         String apiUrl = apiPrefix + generateSubjectEndpoint;
@@ -31,5 +29,13 @@ public class MLIntegrationService {
         HttpEntity<String> requestEntity = createRequestEntity(requestBody);
         ResponseEntity<String> responseEntity = sendPostRequest(apiUrl, requestEntity);
         return getFeedback(responseEntity);
+    }
+
+    public FinishGameMLResponse finishGame(FinishGameRequestBody finishGameRequestBody) {
+        String apiUrl = apiPrefix + finishGameEndpoint;
+        JSONObject requestBody = createRequestBody(finishGameRequestBody);
+        HttpEntity<String> requestEntity = createRequestEntity(requestBody);
+        ResponseEntity<String> responseEntity = sendPostRequest(apiUrl, requestEntity);
+        return getFinishGameResponse(responseEntity);
     }
 }

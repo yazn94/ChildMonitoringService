@@ -4,6 +4,7 @@ import org.example.childmonitoringservice.database.DAO;
 import org.example.childmonitoringservice.model.GameSummary;
 import org.example.childmonitoringservice.model.Instruction;
 import org.example.childmonitoringservice.model.advancedModels.*;
+import org.example.childmonitoringservice.service.ChildProgressHelper;
 import org.example.childmonitoringservice.service.MLIntegrationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,13 +16,17 @@ import java.util.stream.Collectors;
 
 @Service
 public class AdvancedControllerHelper {
-    private DAO dao;
-    private MLIntegrationService mlIntegrationService;
+    private final DAO dao;
+    private final MLIntegrationService mlIntegrationService;
+    private final ChildProgressHelper childProgressHelper;
 
     @Autowired
-    public AdvancedControllerHelper(DAO dao, MLIntegrationService mlIntegrationService) {
+    public AdvancedControllerHelper(DAO dao,
+                                    MLIntegrationService mlIntegrationService,
+                                    ChildProgressHelper childProgressHelper) {
         this.dao = dao;
         this.mlIntegrationService = mlIntegrationService;
+        this.childProgressHelper = childProgressHelper;
     }
 
     public GameDTO generateGame(String token) {
@@ -83,13 +88,61 @@ public class AdvancedControllerHelper {
                 .childAge(age)
                 .parentInstructions(instructionStrings)
                 .doctorInstructions(doctorInstructionStrings)
-                .drawingSubject(feedbackRequest.getDrawingSubject())
+                .drawingSubject(feedbackRequest.getSubject())
                 .screenshot(feedbackRequest.getScreenshot())
                 .build();
 
         return mlIntegrationService.getDrawingFeedback(feedbackRequestBody);
     }
 
+    public EncouragingFeedbackDTO finishGame(String token, FinishGameRequestInput finishGameRequest) {
+        System.out.println("Finish game method within AdvancedControllerHelper");
+        String email = JwtTokenUtil.getEmailFromToken(token);
+
+        // fetch child age
+        int age = fetchChildAge(email);
+
+        // fetch parent instructions
+        ArrayList<Instruction> parentInstructions = dao.getParentInstructions(email);
+        ArrayList<String> instructionStrings = parentInstructions.stream()
+                .map(Instruction::getInstruction)
+                .collect(Collectors.toCollection(ArrayList::new));
+
+        // fetch doctor instructions
+        ArrayList<Instruction> doctorInstructions = dao.getDoctorInstructions(email);
+        ArrayList<String> doctorInstructionStrings = doctorInstructions.stream()
+                .map(Instruction::getInstruction)
+                .collect(Collectors.toCollection(ArrayList::new));
+
+        // fetch old child feedback
+        String oldChildFeedback = childProgressHelper.getGeneralFeedback(email);
+
+        FinishGameRequestBody finishGameRequestBody = FinishGameRequestBody.builder()
+                .childAge(age)
+                .parentInstructions(instructionStrings)
+                .doctorInstructions(doctorInstructionStrings)
+                .drawingSubject(finishGameRequest.getSubject())
+                .screenshot(finishGameRequest.getScreenshot())
+                .oldChildFeedback(oldChildFeedback)
+                .build();
+        System.out.println(finishGameRequestBody.toString());
+
+        FinishGameMLResponse finishGameMLResponse = mlIntegrationService.finishGame(finishGameRequestBody);
+
+        System.out.println(finishGameMLResponse.toString());
+        // update the database with game summary
+        childProgressHelper.addGameSummary(email,
+                finishGameRequest.getSubject(),
+                finishGameMLResponse.getSummary());
+
+        // update child level feedback
+        childProgressHelper.updateGeneralFeedback(email, finishGameMLResponse.getNewChildFeedback());
+
+        // return DTO
+        return new EncouragingFeedbackDTO(
+                finishGameMLResponse.getEncouragingFeedback()
+        );
+    }
 
     private int fetchChildAge(String childEmail) {
         LocalDate date = dao.getChildBirthDate(childEmail);

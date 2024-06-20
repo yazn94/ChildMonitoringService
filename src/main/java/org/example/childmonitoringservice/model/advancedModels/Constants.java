@@ -12,4 +12,8 @@ public class Constants {
     public static final String DRAWING_SUBJECT = "drawing_subject";
     public static final String DRAWING = "drawing";
     public static final String ML_FEEDBACK = "feedback";
+    public static final String SUMMARY = "summary";
+    public static final String ENCOURAGING_FEEDBACK = "encouraging_feedback";
+    public static final String OLD_CHILD_FEEDBACK = "old_ml_feedback_on_child_level";
+    public static final String NEW_CHILD_FEEDBACK = "new_ml_feedback_on_child_level";
 }

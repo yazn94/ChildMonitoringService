@@ -77,13 +77,29 @@ public class DAO {
 
     // update general ml feedback in gaming profile
     public void updateGeneralFeedback(String email, String feedback) {
-        String sql = "UPDATE " + GAMING_PROFILE_TABLE + " SET generalFeedback = ? WHERE email = ?";
+        // check if a record exists for the email
+        String sql = "SELECT COUNT(*) FROM " + GAMING_PROFILE_TABLE + " WHERE email = ?";
+        int count = jdbcTemplate.queryForObject(sql, Integer.class, email);
+        if (count == 0) {
+            // if no record exists, create a new record
+            String insertSql = "INSERT INTO " + GAMING_PROFILE_TABLE + " (email, totalGamesPlayed, generalFeedback) VALUES (?, 0, '')";
+            jdbcTemplate.update(insertSql, email);
+        }
+        sql = "UPDATE " + GAMING_PROFILE_TABLE + " SET generalFeedback = ? WHERE email = ?";
         jdbcTemplate.update(sql, feedback, email);
     }
 
     // get general ml feedback in gaming profile
     public String getGeneralFeedback(String email) {
-        String sql = "SELECT generalFeedback FROM " + GAMING_PROFILE_TABLE + " WHERE email = ?";
+        // check if a record exists for the email
+        String sql = "SELECT COUNT(*) FROM " + GAMING_PROFILE_TABLE + " WHERE email = ?";
+        int count = jdbcTemplate.queryForObject(sql, Integer.class, email);
+        if (count == 0) {
+            // if no record exists, create a new record
+            String insertSql = "INSERT INTO " + GAMING_PROFILE_TABLE + " (email, totalGamesPlayed, generalFeedback) VALUES (?, 0, '')";
+            jdbcTemplate.update(insertSql, email);
+        }
+        sql = "SELECT generalFeedback FROM " + GAMING_PROFILE_TABLE + " WHERE email = ?";
         return jdbcTemplate.queryForObject(sql, String.class, email);
     }
 
@@ -145,5 +161,4 @@ public class DAO {
             return null;
         }
     }
-
 }

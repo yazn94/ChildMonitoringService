@@ -1,9 +1,7 @@
 package org.example.childmonitoringservice.Controller;
 
 import org.example.childmonitoringservice.custom_annotations.ValidJwtToken;
-import org.example.childmonitoringservice.model.advancedModels.FeedbackDTO;
-import org.example.childmonitoringservice.model.advancedModels.FeedbackRequestInput;
-import org.example.childmonitoringservice.model.advancedModels.GameDTO;
+import org.example.childmonitoringservice.model.advancedModels.*;
 import org.example.childmonitoringservice.util.AdvancedControllerHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -28,5 +26,11 @@ public class AdvancedController {
     @ValidJwtToken
     public FeedbackDTO getFeedback(@RequestHeader("Authorization") String token, @RequestBody FeedbackRequestInput feedbackRequest) {
         return advancedControllerHelper.getFeedback(token, feedbackRequest);
+    }
+
+    @GetMapping("/finish/game")
+    @ValidJwtToken
+    public EncouragingFeedbackDTO finishGame(@RequestHeader("Authorization") String token, @RequestBody FinishGameRequestInput finishGameRequest) {
+        return advancedControllerHelper.finishGame(token, finishGameRequest);
     }
 }

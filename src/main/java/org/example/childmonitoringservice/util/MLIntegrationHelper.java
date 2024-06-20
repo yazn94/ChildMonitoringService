@@ -27,6 +27,17 @@ public class MLIntegrationHelper {
         return requestBody;
     }
 
+    public static JSONObject createRequestBody(FinishGameRequestBody finishGameRequestBody) {
+        JSONObject requestBody = new JSONObject();
+        requestBody.put(Constants.CHILD_AGE, finishGameRequestBody.getChildAge());
+        requestBody.put(Constants.PARENT_INSTRUCTIONS, finishGameRequestBody.getParentInstructions());
+        requestBody.put(Constants.DOCTOR_INSTRUCTIONS, finishGameRequestBody.getDoctorInstructions());
+        requestBody.put(Constants.DRAWING_SUBJECT, finishGameRequestBody.getDrawingSubject());
+        requestBody.put(Constants.DRAWING, finishGameRequestBody.getScreenshot());
+        requestBody.put(Constants.OLD_CHILD_FEEDBACK, finishGameRequestBody.getOldChildFeedback());
+        return requestBody;
+    }
+
     public static HttpEntity<String> createRequestEntity(JSONObject requestBody) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -54,5 +65,14 @@ public class MLIntegrationHelper {
         JSONObject responseJson = new JSONObject(responseEntity.getBody());
         feedback.setFeedback(responseJson.getString(Constants.ML_FEEDBACK));
         return feedback;
+    }
+
+    public static FinishGameMLResponse getFinishGameResponse(ResponseEntity<String> responseEntity) {
+        FinishGameMLResponse finishGameMLResponse = new FinishGameMLResponse();
+        JSONObject responseJson = new JSONObject(responseEntity.getBody());
+        finishGameMLResponse.setEncouragingFeedback(responseJson.getString(Constants.ENCOURAGING_FEEDBACK));
+        finishGameMLResponse.setSummary(responseJson.getString(Constants.SUMMARY));
+        finishGameMLResponse.setNewChildFeedback(responseJson.getString(Constants.NEW_CHILD_FEEDBACK));
+        return finishGameMLResponse;
     }
 }
