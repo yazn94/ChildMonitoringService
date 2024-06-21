@@ -17,7 +17,7 @@
 
 2. Get Feedback
 - Endpoint
-    - GET /monitoring/advanced/get/feedback
+    - POST /monitoring/advanced/get/feedback
 - Description
     - Retrieves feedback for the provided drawing subject and screenshot.
 - Headers
@@ -36,7 +36,7 @@
 
 3. Finish Game
 - Endpoint
-    - GET /monitoring/advanced/finish/game
+    - POST /monitoring/advanced/finish/game
 - Description
     - Finishes a game and provides encouraging feedback.
 - Headers
@@ -90,7 +90,7 @@
 
 6. Get Parent Instructions
 - Endpoint
-    - GET /monitoring/get/parent/instructions
+    - POST /monitoring/get/parent/instructions
 - Headers
     - Authorization: <token>
 - Request Body
@@ -112,7 +112,7 @@
 
 7. Get Doctor Instructions
 - Endpoint
-    - GET /monitoring/get/doctor/instructions
+    - POST /monitoring/get/doctor/instructions
 - Headers
     - Authorization: <token>
 - Request Body
@@ -164,7 +164,7 @@ Copy code
 
 10. Get General Feedback
 - Endpoint
-    - GET /monitoring/get/general/feedback
+    - POST /monitoring/get/general/feedback
 - Headers
     - Authorization: <token>
 - Request Body
@@ -183,7 +183,7 @@ Copy code
 
 11. Get Total Games Played
 - Endpoint
-    - GET /monitoring/get/total/games/played
+    - POST /monitoring/get/total/games/played
 - Headers
     - Authorization: <token>
 - Request Body
@@ -219,7 +219,7 @@ Response
 
 13. Get Game Summaries
 - Endpoint
-    - GET /monitoring/get/game/summaries
+    - POST /monitoring/get/game/summaries
 - Headers
     - Authorization: <token>
 - Request Body
@@ -240,7 +240,7 @@ Response
 
 14. Delete Parent Instruction
 - Endpoint
-    - DELETE /monitoring/delete/parent/instruction
+    - POST /monitoring/delete/parent/instruction
 - Headers
     - Authorization: <token>
 - Request Body
@@ -256,7 +256,7 @@ Response
 
 15. Delete Doctor Instruction
 - Endpoint
-    - DELETE /monitoring/delete/doctor/instruction
+    - POST /monitoring/delete/doctor/instruction
 - Headers
     - Authorization: <token>
 - Request Body

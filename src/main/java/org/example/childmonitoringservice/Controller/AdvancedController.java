@@ -22,13 +22,13 @@ public class AdvancedController {
         return advancedControllerHelper.generateGame(token);
     }
 
-    @GetMapping("/get/feedback")
+    @PostMapping("/get/feedback")
     @ValidJwtToken
     public FeedbackDTO getFeedback(@RequestHeader("Authorization") String token, @RequestBody FeedbackRequestInput feedbackRequest) {
         return advancedControllerHelper.getFeedback(token, feedbackRequest);
     }
 
-    @GetMapping("/finish/game")
+    @PostMapping("/finish/game")
     @ValidJwtToken
     public EncouragingFeedbackDTO finishGame(@RequestHeader("Authorization") String token, @RequestBody FinishGameRequestInput finishGameRequest) {
         return advancedControllerHelper.finishGame(token, finishGameRequest);

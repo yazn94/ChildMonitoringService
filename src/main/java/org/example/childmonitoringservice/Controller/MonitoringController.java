@@ -65,7 +65,7 @@ public class MonitoringController {
     }
 
     // get parent instructions (by parent or doctor)
-    @GetMapping("get/parent/instructions")
+    @PostMapping("get/parent/instructions")
     @ValidJwtToken
     public ArrayList<Instruction> getParentInstructions(@RequestHeader("Authorization") String token,
                                                         @RequestBody @NotNull @Valid EmailDTO childEmail) {
@@ -73,7 +73,7 @@ public class MonitoringController {
     }
 
     // get doctor instructions (by parent or doctor)
-    @GetMapping("get/doctor/instructions")
+    @PostMapping("get/doctor/instructions")
     @ValidJwtToken
     public ArrayList<Instruction> getDoctorInstructions(@RequestHeader("Authorization") String token,
                                                         @RequestBody @NotNull @Valid EmailDTO childEmail) {
@@ -102,7 +102,7 @@ public class MonitoringController {
     }
 
     // get general ml feedback in gaming profile (by parent or doctor)
-    @GetMapping("get/general/feedback")
+    @PostMapping("get/general/feedback")
     @ValidJwtToken
     public FeedbackDTO getGeneralFeedback(@RequestHeader("Authorization") String token,
                                           @RequestBody @NotNull @Valid EmailDTO childEmail,
@@ -116,7 +116,7 @@ public class MonitoringController {
     }
 
     // get total played games (by parent or doctor or child)
-    @GetMapping("get/total/games/played")
+    @PostMapping("get/total/games/played")
     @ValidJwtToken
     public TotalPlayedGamesDTO getTotalGamesPlayed(@RequestHeader("Authorization") String token,
                                                    @RequestBody @NotNull @Valid EmailDTO childEmail,
@@ -145,7 +145,7 @@ public class MonitoringController {
     }
 
     // get game summaries (by parent or doctor or child)
-    @GetMapping("get/game/summaries")
+    @PostMapping("get/game/summaries")
     @ValidJwtToken
     public ArrayList<GameSummary> getGameSummaries(@RequestHeader("Authorization") String token,
                                                    @RequestBody @NotNull @Valid EmailDTO childEmail,
@@ -157,7 +157,7 @@ public class MonitoringController {
     }
 
     // delete parent instruction (by parent)
-    @DeleteMapping("delete/parent/instruction")
+    @PostMapping("delete/parent/instruction")
     @ValidJwtToken
     public void deleteParentInstruction(@RequestHeader("Authorization") String token,
                                         @RequestBody IdDTO id,
@@ -169,7 +169,7 @@ public class MonitoringController {
     }
 
     // delete doctor instruction (by doctor)
-    @DeleteMapping("delete/doctor/instruction")
+    @PostMapping("delete/doctor/instruction")
     @ValidJwtToken
     public void deleteDoctorInstruction(@RequestHeader("Authorization") String token,
                                         @RequestBody IdDTO id,
